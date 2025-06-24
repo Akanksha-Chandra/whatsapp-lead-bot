@@ -1,0 +1,586 @@
+{
+  "1750698085303": {
+    "leadId": "1750698085303",
+    "messages": [
+      {
+        "id": "1750698127108",
+        "sender": "user",
+        "message": "Pune",
+        "timestamp": "2025-06-23T17:02:07.108Z"
+      },
+      {
+        "id": "1750698127111",
+        "sender": "bot",
+        "message": "Which city or location are you looking for? 📍",
+        "timestamp": "2025-06-23T17:02:07.111Z"
+      },
+      {
+        "id": "1750698131683",
+        "sender": "user",
+        "message": "Pune",
+        "timestamp": "2025-06-23T17:02:11.683Z"
+      },
+      {
+        "id": "1750698131689",
+        "sender": "bot",
+        "message": "Got it! Are you looking to buy or rent a property? 🏠",
+        "timestamp": "2025-06-23T17:02:11.689Z"
+      },
+      {
+        "id": "1750698143008",
+        "sender": "user",
+        "message": "Rent",
+        "timestamp": "2025-06-23T17:02:23.008Z"
+      },
+      {
+        "id": "1750698143015",
+        "sender": "bot",
+        "message": "Got it! What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+        "timestamp": "2025-06-23T17:02:23.015Z"
+      },
+      {
+        "id": "1750698497253",
+        "sender": "user",
+        "message": "Flat",
+        "timestamp": "2025-06-23T17:08:17.253Z"
+      },
+      {
+        "id": "1750698497259",
+        "sender": "bot",
+        "message": "Got it! What's your budget range? 💰",
+        "timestamp": "2025-06-23T17:08:17.259Z"
+      },
+      {
+        "id": "1750698513369",
+        "sender": "user",
+        "message": "70 l",
+        "timestamp": "2025-06-23T17:08:33.369Z"
+      },
+      {
+        "id": "1750698513376",
+        "sender": "bot",
+        "message": "Got it! When are you planning to make this purchase/move? ⏰",
+        "timestamp": "2025-06-23T17:08:33.376Z"
+      },
+      {
+        "id": "1750698772221",
+        "sender": "user",
+        "message": "3 months",
+        "timestamp": "2025-06-23T17:12:52.221Z"
+      },
+      {
+        "id": "1750698772229",
+        "sender": "bot",
+        "message": "Got it! Is this for personal use or investment? 📈",
+        "timestamp": "2025-06-23T17:12:52.229Z"
+      },
+      {
+        "id": "1750698782153",
+        "sender": "user",
+        "message": "personal",
+        "timestamp": "2025-06-23T17:13:02.153Z"
+      },
+      {
+        "id": "1750698782652",
+        "sender": "bot",
+        "message": "Thank you for that information! Let me help you find the perfect property.",
+        "timestamp": "2025-06-23T17:13:02.652Z"
+      }
+    ],
+    "currentStep": 6,
+    "extractedData": {
+      "purpose": "personal"
+    },
+    "createdAt": "2025-06-23T17:01:25.305Z"
+  },
+  "1750703490197": {
+    "leadId": "1750703490197",
+    "messages": [
+      {
+        "id": "1750703541881",
+        "sender": "user",
+        "message": "Noida Extension",
+        "timestamp": "2025-06-23T18:32:21.881Z"
+      },
+      {
+        "id": "1750703541887",
+        "sender": "bot",
+        "message": "Which city or location are you looking for? 📍",
+        "timestamp": "2025-06-23T18:32:21.887Z"
+      },
+      {
+        "id": "1750703545511",
+        "sender": "user",
+        "message": "Noida Extension",
+        "timestamp": "2025-06-23T18:32:25.511Z"
+      },
+      {
+        "id": "1750703545534",
+        "sender": "bot",
+        "message": "Got it! Are you looking to buy or rent a property? 🏠",
+        "timestamp": "2025-06-23T18:32:25.534Z"
+      },
+      {
+        "id": "1750703555497",
+        "sender": "user",
+        "message": "I want to buy",
+        "timestamp": "2025-06-23T18:32:35.497Z"
+      },
+      {
+        "id": "1750703555505",
+        "sender": "bot",
+        "message": "Got it! What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+        "timestamp": "2025-06-23T18:32:35.505Z"
+      },
+      {
+        "id": "1750703570416",
+        "sender": "user",
+        "message": "Villa",
+        "timestamp": "2025-06-23T18:32:50.416Z"
+      },
+      {
+        "id": "1750703570424",
+        "sender": "bot",
+        "message": "Got it! What's your budget range? 💰",
+        "timestamp": "2025-06-23T18:32:50.424Z"
+      },
+      {
+        "id": "1750703584236",
+        "sender": "user",
+        "message": "70 L",
+        "timestamp": "2025-06-23T18:33:04.236Z"
+      },
+      {
+        "id": "1750703584254",
+        "sender": "bot",
+        "message": "Got it! When are you planning to make this purchase/move? ⏰",
+        "timestamp": "2025-06-23T18:33:04.254Z"
+      },
+      {
+        "id": "1750703592793",
+        "sender": "user",
+        "message": "7 months",
+        "timestamp": "2025-06-23T18:33:12.793Z"
+      },
+      {
+        "id": "1750703592802",
+        "sender": "bot",
+        "message": "Got it! Is this for personal use or investment? 📈",
+        "timestamp": "2025-06-23T18:33:12.802Z"
+      },
+      {
+        "id": "1750703602380",
+        "sender": "user",
+        "message": "personal",
+        "timestamp": "2025-06-23T18:33:22.380Z"
+      },
+      {
+        "id": "1750703603254",
+        "sender": "bot",
+        "message": "Thank you for that information! Let me help you find the perfect property.",
+        "timestamp": "2025-06-23T18:33:23.254Z"
+      }
+    ],
+    "currentStep": 6,
+    "extractedData": {
+      "purpose": "personal"
+    },
+    "createdAt": "2025-06-23T18:31:30.215Z"
+  },
+  "1750704084607": {
+    "leadId": "1750704084607",
+    "messages": [
+      {
+        "id": "1750704084613",
+        "sender": "bot",
+        "message": "Hi Akanksha! Welcome to GrowEasy Realtors. Let's get started. 🏡",
+        "timestamp": "2025-06-23T18:41:24.613Z"
+      },
+      {
+        "id": "1750704084613",
+        "sender": "bot",
+        "message": "Which city or location are you looking for? 📍",
+        "timestamp": "2025-06-23T18:41:24.613Z"
+      },
+      {
+        "id": "1750704136762",
+        "sender": "user",
+        "message": "Noida Extension",
+        "timestamp": "2025-06-23T18:42:16.762Z"
+      },
+      {
+        "id": "1750704136763",
+        "sender": "bot",
+        "message": "Got it! Are you looking to buy or rent a property? 🏠",
+        "timestamp": "2025-06-23T18:42:16.763Z"
+      },
+      {
+        "id": "1750704152744",
+        "sender": "user",
+        "message": "I want to buy",
+        "timestamp": "2025-06-23T18:42:32.744Z"
+      },
+      {
+        "id": "1750704152744",
+        "sender": "bot",
+        "message": "Got it! What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+        "timestamp": "2025-06-23T18:42:32.744Z"
+      },
+      {
+        "id": "1750704173736",
+        "sender": "user",
+        "message": "flat",
+        "timestamp": "2025-06-23T18:42:53.736Z"
+      },
+      {
+        "id": "1750704173736",
+        "sender": "bot",
+        "message": "Got it! What's your budget range? 💰",
+        "timestamp": "2025-06-23T18:42:53.736Z"
+      },
+      {
+        "id": "1750704182787",
+        "sender": "user",
+        "message": "75 l",
+        "timestamp": "2025-06-23T18:43:02.787Z"
+      },
+      {
+        "id": "1750704182787",
+        "sender": "bot",
+        "message": "Got it! When are you planning to make this purchase/move? ⏰",
+        "timestamp": "2025-06-23T18:43:02.787Z"
+      },
+      {
+        "id": "1750704195103",
+        "sender": "user",
+        "message": "7 months",
+        "timestamp": "2025-06-23T18:43:15.103Z"
+      },
+      {
+        "id": "1750704195103",
+        "sender": "bot",
+        "message": "Got it! Is this for personal use or investment? 📈",
+        "timestamp": "2025-06-23T18:43:15.103Z"
+      },
+      {
+        "id": "1750704206971",
+        "sender": "user",
+        "message": "investment",
+        "timestamp": "2025-06-23T18:43:26.971Z"
+      },
+      {
+        "id": "1750704207861",
+        "sender": "bot",
+        "message": "Investment properties! I'd be happy to help you with that.\n\nAre you looking to invest in a rental property, fix-and-flip, or perhaps a vacation rental? Or maybe you're just starting to explore the world of real estate investing?\n\nLet me ask you, what are your goals and priorities for this investment? Are you looking for passive income, to diversify your portfolio, or potentially achieve long-term capital appreciation?\n\nAlso, do you have any specific location or property type in mind?",
+        "timestamp": "2025-06-23T18:43:27.861Z"
+      }
+    ],
+    "currentStep": 6,
+    "extractedData": {
+      "location": "noida extension",
+      "intent": "buy",
+      "propertyType": "flat",
+      "budget": "75 lakh",
+      "timeline": "7 months",
+      "purpose": "investment"
+    },
+    "createdAt": "2025-06-23T18:41:24.613Z"
+  },
+  "1750704675777": {
+    "leadId": "1750704675777",
+    "messages": [
+      {
+        "id": "1750704675780",
+        "sender": "bot",
+        "message": "Hi Akanksha! Welcome to GrowEasy Realtors. Let's get started. 🏡",
+        "timestamp": "2025-06-23T18:51:15.780Z"
+      },
+      {
+        "id": "1750704675780",
+        "sender": "bot",
+        "message": "Which city or location are you looking for? 📍",
+        "timestamp": "2025-06-23T18:51:15.780Z"
+      },
+      {
+        "id": "1750704696723",
+        "sender": "user",
+        "message": "Pune",
+        "timestamp": "2025-06-23T18:51:36.723Z"
+      },
+      {
+        "id": "1750704696723",
+        "sender": "bot",
+        "message": "Got it! Are you looking to buy or rent a property? 🏠",
+        "timestamp": "2025-06-23T18:51:36.723Z"
+      },
+      {
+        "id": "1750704702823",
+        "sender": "user",
+        "message": "Buy",
+        "timestamp": "2025-06-23T18:51:42.823Z"
+      },
+      {
+        "id": "1750704702823",
+        "sender": "bot",
+        "message": "Got it! What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+        "timestamp": "2025-06-23T18:51:42.823Z"
+      },
+      {
+        "id": "1750704708380",
+        "sender": "user",
+        "message": "Flat",
+        "timestamp": "2025-06-23T18:51:48.380Z"
+      },
+      {
+        "id": "1750704708380",
+        "sender": "bot",
+        "message": "Got it! What's your budget range? 💰",
+        "timestamp": "2025-06-23T18:51:48.380Z"
+      },
+      {
+        "id": "1750704714566",
+        "sender": "user",
+        "message": "70 Lakh",
+        "timestamp": "2025-06-23T18:51:54.566Z"
+      },
+      {
+        "id": "1750704714566",
+        "sender": "bot",
+        "message": "Got it! When are you planning to make this purchase/move? ⏰",
+        "timestamp": "2025-06-23T18:51:54.566Z"
+      },
+      {
+        "id": "1750704821620",
+        "sender": "user",
+        "message": "3 months",
+        "timestamp": "2025-06-23T18:53:41.620Z"
+      },
+      {
+        "id": "1750704821620",
+        "sender": "bot",
+        "message": "Got it! Is this for personal use or investment? 📈",
+        "timestamp": "2025-06-23T18:53:41.620Z"
+      },
+      {
+        "id": "1750704829367",
+        "sender": "user",
+        "message": "Personal use",
+        "timestamp": "2025-06-23T18:53:49.367Z"
+      },
+      {
+        "id": "1750704831194",
+        "sender": "bot",
+        "message": "Welcome! I'd be happy to help you with your real estate needs.\n\nWhat can I assist you with today? Are you looking to buy or sell a property? Do you need help with finding a home, staging a property, or navigating the buying/selling process?",
+        "timestamp": "2025-06-23T18:53:51.194Z"
+      }
+    ],
+    "currentStep": 6,
+    "extractedData": {
+      "location": "pune",
+      "intent": "buy",
+      "propertyType": "flat",
+      "budget": "70 lakh",
+      "timeline": "3 months",
+      "purpose": "personal"
+    },
+    "createdAt": "2025-06-23T18:51:15.780Z"
+  },
+  "1750705211113": {
+    "leadId": "1750705211113",
+    "messages": [
+      {
+        "id": "1750705211115",
+        "sender": "bot",
+        "message": "Hi Aka! Welcome to GrowEasy Realtors. Let's get started. 🏡",
+        "timestamp": "2025-06-23T19:00:11.115Z"
+      },
+      {
+        "id": "1750705211115",
+        "sender": "bot",
+        "message": "Which city or location are you looking for? 📍",
+        "timestamp": "2025-06-23T19:00:11.115Z"
+      },
+      {
+        "id": "1750705216529",
+        "sender": "user",
+        "message": "raipur",
+        "timestamp": "2025-06-23T19:00:16.529Z"
+      },
+      {
+        "id": "1750705216529",
+        "sender": "bot",
+        "message": "Got it! Are you looking to buy or rent a property? 🏠",
+        "timestamp": "2025-06-23T19:00:16.529Z"
+      },
+      {
+        "id": "1750705221232",
+        "sender": "user",
+        "message": "rent",
+        "timestamp": "2025-06-23T19:00:21.232Z"
+      },
+      {
+        "id": "1750705221232",
+        "sender": "bot",
+        "message": "Got it! What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+        "timestamp": "2025-06-23T19:00:21.232Z"
+      },
+      {
+        "id": "1750705224953",
+        "sender": "user",
+        "message": "flat",
+        "timestamp": "2025-06-23T19:00:24.953Z"
+      },
+      {
+        "id": "1750705224953",
+        "sender": "bot",
+        "message": "Got it! What's your budget range? 💰",
+        "timestamp": "2025-06-23T19:00:24.953Z"
+      },
+      {
+        "id": "1750705232392",
+        "sender": "user",
+        "message": "15000",
+        "timestamp": "2025-06-23T19:00:32.392Z"
+      },
+      {
+        "id": "1750705232392",
+        "sender": "bot",
+        "message": "Got it! When are you planning to make this purchase/move? ⏰",
+        "timestamp": "2025-06-23T19:00:32.392Z"
+      },
+      {
+        "id": "1750705238477",
+        "sender": "user",
+        "message": "3 months",
+        "timestamp": "2025-06-23T19:00:38.477Z"
+      },
+      {
+        "id": "1750705238477",
+        "sender": "bot",
+        "message": "Got it! Is this for personal use or investment? 📈",
+        "timestamp": "2025-06-23T19:00:38.477Z"
+      },
+      {
+        "id": "1750705242736",
+        "sender": "user",
+        "message": "personal",
+        "timestamp": "2025-06-23T19:00:42.736Z"
+      },
+      {
+        "id": "1750705243357",
+        "sender": "bot",
+        "message": "As your personal real estate assistant, I'll be happy to help you find your dream home or rent a property that fits your needs. Here are some ways I can assist you:\n\n1. Home Search: I can help you search for homes that fit your criteria, whether it's a specific location, size, price range, or amenities. I'll provide you with a list of properties that match your requirements, and you can narrow down your search based on your preferences.\n2. Property Analysis: I",
+        "timestamp": "2025-06-23T19:00:43.357Z"
+      }
+    ],
+    "currentStep": 6,
+    "extractedData": {
+      "location": "raipur",
+      "intent": "rent",
+      "propertyType": "flat",
+      "budget": "15000",
+      "timeline": "3 months",
+      "purpose": "personal"
+    },
+    "createdAt": "2025-06-23T19:00:11.115Z"
+  },
+  "1750724684674": {
+    "leadId": "1750724684674",
+    "messages": [
+      {
+        "id": "1750724684677",
+        "sender": "bot",
+        "message": "Hi Pragya Chandra! Welcome to GrowEasy Realtors. Let's get started. 🏡",
+        "timestamp": "2025-06-24T00:24:44.677Z"
+      },
+      {
+        "id": "1750724684677",
+        "sender": "bot",
+        "message": "Which city or location are you looking for? 📍",
+        "timestamp": "2025-06-24T00:24:44.677Z"
+      },
+      {
+        "id": "1750724828251",
+        "sender": "user",
+        "message": "Bilaspur",
+        "timestamp": "2025-06-24T00:27:08.251Z"
+      },
+      {
+        "id": "1750724828251",
+        "sender": "bot",
+        "message": "Got it! Are you looking to buy or rent a property? 🏠",
+        "timestamp": "2025-06-24T00:27:08.251Z"
+      },
+      {
+        "id": "1750724839858",
+        "sender": "user",
+        "message": "Rent",
+        "timestamp": "2025-06-24T00:27:19.858Z"
+      },
+      {
+        "id": "1750724839858",
+        "sender": "bot",
+        "message": "Got it! What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+        "timestamp": "2025-06-24T00:27:19.858Z"
+      },
+      {
+        "id": "1750724843200",
+        "sender": "user",
+        "message": "Flat",
+        "timestamp": "2025-06-24T00:27:23.200Z"
+      },
+      {
+        "id": "1750724843200",
+        "sender": "bot",
+        "message": "Got it! What's your budget range? 💰",
+        "timestamp": "2025-06-24T00:27:23.200Z"
+      },
+      {
+        "id": "1750724849339",
+        "sender": "user",
+        "message": "20 k",
+        "timestamp": "2025-06-24T00:27:29.339Z"
+      },
+      {
+        "id": "1750724849339",
+        "sender": "bot",
+        "message": "Got it! When are you planning to make this purchase/move? ⏰",
+        "timestamp": "2025-06-24T00:27:29.339Z"
+      },
+      {
+        "id": "1750724854076",
+        "sender": "user",
+        "message": "2 months",
+        "timestamp": "2025-06-24T00:27:34.076Z"
+      },
+      {
+        "id": "1750724854076",
+        "sender": "bot",
+        "message": "Got it! Is this for personal use or investment? 📈",
+        "timestamp": "2025-06-24T00:27:34.076Z"
+      },
+      {
+        "id": "1750724875701",
+        "sender": "user",
+        "message": "personal use",
+        "timestamp": "2025-06-24T00:27:55.701Z"
+      },
+      {
+        "id": "1750724876333",
+        "sender": "bot",
+        "message": "I'd be happy to assist you with your real estate needs.\n\nAre you looking to buy, sell, or rent a property? Do you have a specific location in mind or a particular type of property in mind (e.g. condo, single-family home, commercial space)?\n\nAdditionally, what is your budget for the property?",
+        "timestamp": "2025-06-24T00:27:56.333Z"
+      }
+    ],
+    "currentStep": 6,
+    "extractedData": {
+      "location": "bilaspur",
+      "intent": "rent",
+      "propertyType": "flat",
+      "budget": "20 k",
+      "timeline": "2 months",
+      "purpose": "personal"
+    },
+    "createdAt": "2025-06-24T00:24:44.677Z"
+  }
+}

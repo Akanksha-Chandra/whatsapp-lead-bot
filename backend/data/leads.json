@@ -1,0 +1,102 @@
+[
+  {
+    "id": "1750698085303",
+    "name": "Rohit Sharma",
+    "phone": "+91-9876543210",
+    "source": "Website",
+    "initialMessage": "Interested in buying property",
+    "status": "Active",
+    "classification": "Invalid",
+    "createdAt": "2025-06-23T17:01:25.303Z",
+    "metadata": {
+      "purpose": "personal"
+    },
+    "score": 0
+  },
+  {
+    "id": "1750703490197",
+    "name": "Akanksha",
+    "phone": "9876543210",
+    "source": "Facebook",
+    "initialMessage": "I want to buy a flat in Noida.",
+    "status": "Active",
+    "classification": "Invalid",
+    "createdAt": "2025-06-23T18:31:30.201Z",
+    "metadata": {
+      "purpose": "personal"
+    },
+    "score": 0
+  },
+  {
+    "id": "1750704084607",
+    "name": "Akanksha",
+    "phone": "9876543210",
+    "source": "Facebook",
+    "initialMessage": "I want to buy a flat in Noida.",
+    "status": "Active",
+    "classification": "Hot",
+    "createdAt": "2025-06-23T18:41:24.607Z",
+    "metadata": {
+      "location": "noida extension",
+      "intent": "buy",
+      "propertyType": "flat",
+      "budget": "75 lakh",
+      "timeline": "7 months"
+    },
+    "score": 15
+  },
+  {
+    "id": "1750704675777",
+    "name": "Akanksha",
+    "phone": "9842567456",
+    "source": "Facebook",
+    "initialMessage": "I wanna buy property",
+    "status": "Active",
+    "classification": "Hot",
+    "createdAt": "2025-06-23T18:51:15.777Z",
+    "metadata": {
+      "location": "pune",
+      "intent": "buy",
+      "propertyType": "flat",
+      "budget": "70 lakh",
+      "timeline": "3 months"
+    },
+    "score": 15
+  },
+  {
+    "id": "1750705211113",
+    "name": "Aka",
+    "phone": "8602948101",
+    "source": "Facebook",
+    "initialMessage": "Hello guys",
+    "status": "Active",
+    "classification": "Hot",
+    "createdAt": "2025-06-23T19:00:11.113Z",
+    "metadata": {
+      "location": "raipur",
+      "intent": "rent",
+      "propertyType": "flat",
+      "budget": "15000",
+      "timeline": "3 months"
+    },
+    "score": 12
+  },
+  {
+    "id": "1750724684674",
+    "name": "Pragya Chandra",
+    "phone": "7462846284",
+    "source": "Website",
+    "initialMessage": "Rent a home",
+    "status": "Active",
+    "classification": "Hot",
+    "createdAt": "2025-06-24T00:24:44.674Z",
+    "metadata": {
+      "location": "bilaspur",
+      "intent": "rent",
+      "propertyType": "flat",
+      "budget": "20 k",
+      "timeline": "2 months"
+    },
+    "score": 12
+  }
+]

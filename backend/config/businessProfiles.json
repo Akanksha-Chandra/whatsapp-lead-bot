@@ -1,0 +1,26 @@
+{
+  "realEstate": {
+    "greetingTemplates": [
+      "Hi {name}! Welcome to GrowEasy Realtors. Let's get started. 🏡",
+      "Hello {name}! I’m your real estate assistant. How can I help? 🌟"
+    ],
+    "questions": [
+      "Which city or location are you looking for? 📍",
+      "Are you looking to buy or rent a property? 🏠",
+      "What type of property interests you? (Flat, Villa, Plot, Commercial) 🏢",
+      "What's your budget range? 💰",
+      "When are you planning to make this purchase/move? ⏰",
+      "Is this for personal use or investment? 📈"
+    ],
+    "scoreWeights": {
+      "budget": 3,
+      "timeline": 3,
+      "location": 2,
+      "intent": 2
+    },
+    "scoreThresholds": {
+      "hot": 8,
+      "cold": 4
+    }
+  }
+}
