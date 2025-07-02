@@ -4,6 +4,7 @@
   height: 100vh;
   background: #e5ddd5;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 0;
 }
 
 /* Main Chat Area */
@@ -12,6 +13,9 @@
   flex-direction: column;
   flex: 1;
   min-width: 0; /* Prevent flex item from overflowing */
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* Chat Header */
@@ -94,6 +98,7 @@
 /* Messages Container */
 .messages-container {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 16px;
