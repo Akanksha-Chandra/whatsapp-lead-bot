@@ -95,7 +95,7 @@ app.post('/api/chat/:leadId/message', async (req, res) => {
     chat.messages.push(createMessage('bot', aiResponse.message));
 
     if (aiResponse.isComplete) {
-      await classifyLead(leadId);
+      await classifyLeadWithGroq(leadId);
     }
 
     writeChats(chats);
@@ -141,7 +141,7 @@ async function generateAIResponse(chats, leadId, userMessage) {
   const step = chat.currentStep;
 
   if (step > 0) {
-    extractDataFromResponse(chats[leadId], userMessage, step - 1);
+    await extractDataFromResponseWithGroq(chats[leadId], userMessage, step - 1);
   }
 
   let isComplete = false, botMessage = '';
@@ -155,6 +155,36 @@ async function generateAIResponse(chats, leadId, userMessage) {
   }
 
   return { message: botMessage, isComplete };
+}
+
+async function extractDataFromResponseWithGroq(chat, response, step) {
+  const stepKeys = ['location', 'intent', 'propertyType', 'budget', 'timeline', 'purpose'];
+  const key = stepKeys[step];
+  if (!key) return;
+
+  // Use Groq to extract structured data from user response
+  const extractionPrompt = `Extract ${key} information from this real estate inquiry response: "${response}"
+
+Return only the extracted value in this format:
+- For location: return city/area name only
+- For intent: return "buy", "rent", or "sell" only
+- For propertyType: return property type (e.g., "2BHK flat", "villa", "plot")
+- For budget: return budget amount with currency (e.g., "75L", "1.2cr")
+- For timeline: return timeline (e.g., "3 months", "urgent", "flexible")
+- For purpose: return "personal" or "investment"
+
+If no clear information is found, return "unclear".`;
+
+  try {
+    const extractedValue = await callGroq(extractionPrompt);
+    if (extractedValue && extractedValue.toLowerCase() !== 'unclear') {
+      chat.extractedData[key] = extractedValue.trim();
+    }
+  } catch (error) {
+    console.error('Error extracting data with Groq:', error);
+    // Fallback to basic extraction
+    extractDataFromResponse(chat, response, step);
+  }
 }
 
 function extractDataFromResponse(chat, response, step) {
@@ -181,7 +211,117 @@ function extractDataFromResponse(chat, response, step) {
   if (value) chat.extractedData[key] = value;
 }
 
-async function classifyLead(leadId) {
+async function classifyLeadWithGroq(leadId) {
+  const leads = readLeads();
+  const chats = readChats();
+  const chat = chats[leadId];
+  const leadIndex = leads.findIndex(l => l.id === leadId);
+  if (leadIndex === -1 || !chat) return;
+
+  // Prepare conversation history for analysis
+  const conversationHistory = chat.messages.map(msg => 
+    `${msg.sender === 'bot' ? 'Agent' : 'Customer'}: ${msg.message}`
+  ).join('\n');
+
+  const classificationPrompt = `Analyze this real estate lead conversation and classify the lead quality.
+
+CONVERSATION HISTORY:
+${conversationHistory}
+
+EXTRACTED DATA:
+${JSON.stringify(chat.extractedData, null, 2)}
+
+CLASSIFICATION CRITERIA - You MUST classify as exactly one of these three categories:
+
+**HOT** - High conversion potential:
+- Clear intent to buy/rent with specific requirements
+- Defined budget range mentioned (actual numbers)
+- Urgent timeline (within 1-6 months, "urgent", "soon", "ASAP")
+- Specific location preferences mentioned
+- Responsive and engaged throughout conversation
+- Ready to take next steps (site visits, documentation, meetings)
+- Asks follow-up questions or shows genuine interest
+
+**COLD** - Low conversion potential:
+- Vague or unclear requirements ("just browsing", "exploring options")
+- No specific budget mentioned or very flexible/distant timeline
+- Generic responses without specifics
+- Unresponsive to follow-up questions
+- General inquiries without commitment indicators
+- No urgency expressed
+
+**INVALID** - Not a genuine prospect:
+- Nonsensical responses, gibberish, or random characters
+- Test entries or clearly fake information
+- No meaningful engagement despite multiple attempts
+- Spam or bot-like behavior
+- Completely inappropriate or irrelevant responses
+- Single word responses that make no sense
+
+IMPORTANT: You must classify as exactly one of: HOT, COLD, or INVALID (uppercase only)
+
+Respond in this exact JSON format:
+{
+  "classification": "HOT",
+  "confidence": 85,
+  "reason": "Clear intent with specific budget and urgent timeline",
+  "priority": "High"
+}`;
+
+  try {
+    const classificationResult = await callGroq(classificationPrompt);
+    console.log('Raw Groq classification result:', classificationResult);
+    
+    // Parse the JSON response
+    let parsedResult;
+    try {
+      // Clean the response in case there's extra text
+      const jsonMatch = classificationResult.match(/\{[\s\S]*\}/);
+      const jsonString = jsonMatch ? jsonMatch[0] : classificationResult;
+      parsedResult = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error('Error parsing classification result:', parseError);
+      console.log('Raw result was:', classificationResult);
+      // Fallback to rule-based classification
+      await classifyLeadRuleBased(leadId);
+      return;
+    }
+
+    // Validate classification value
+    const validClassifications = ['HOT', 'COLD', 'INVALID'];
+    const classification = parsedResult.classification?.toUpperCase();
+    
+    if (!validClassifications.includes(classification)) {
+      console.error('Invalid classification returned:', parsedResult.classification);
+      // Default to COLD if classification is invalid
+      parsedResult.classification = 'COLD';
+    } else {
+      parsedResult.classification = classification;
+    }
+
+    // Update lead with classification
+    leads[leadIndex].classification = parsedResult.classification;
+    leads[leadIndex].metadata = { 
+      ...leads[leadIndex].metadata, 
+      ...chat.extractedData,
+      confidence: parsedResult.confidence || 50,
+      classificationReason: parsedResult.reason || 'AI classification',
+      priority: parsedResult.priority || 'Medium',
+      classificationDate: new Date().toISOString(),
+      classificationMethod: 'groq-ai'
+    };
+
+    writeLeads(leads);
+    console.log(`✅ Lead ${leadId} classified as ${parsedResult.classification} with ${parsedResult.confidence}% confidence: ${parsedResult.reason}`);
+
+  } catch (error) {
+    console.error('Error classifying lead with Groq:', error);
+    // Fallback to rule-based classification
+    await classifyLeadRuleBased(leadId);
+  }
+}
+
+async function classifyLeadRuleBased(leadId) {
   const leads = readLeads();
   const chats = readChats();
   const chat = chats[leadId];
@@ -190,8 +330,30 @@ async function classifyLead(leadId) {
 
   const data = chat.extractedData;
   let score = 0;
-  const weights = businessConfig.scoreWeights;
+  const weights = businessConfig.scoreWeights || {};
 
+  // Check for invalid/gibberish responses first
+  const userMessages = chat.messages.filter(m => m.sender === 'user').map(m => m.message.toLowerCase());
+  const hasGibberish = userMessages.some(msg => 
+    /^[a-z]{10,}$/.test(msg) || // Random letters
+    /^\d{8,}$/.test(msg) || // Random numbers
+    msg.length < 2 ||
+    /^(test|asdf|qwerty|123)/i.test(msg)
+  );
+
+  if (hasGibberish || userMessages.length === 0) {
+    leads[leadIndex].classification = 'INVALID';
+    leads[leadIndex].metadata = { 
+      ...leads[leadIndex].metadata, 
+      ...data,
+      classificationReason: 'Invalid or test responses detected',
+      classificationMethod: 'rule-based-invalid'
+    };
+    writeLeads(leads);
+    return;
+  }
+
+  // Score calculation for HOT/COLD classification
   if (data.budget) {
     const budget = data.budget.toLowerCase();
     if (budget.includes('cr')) score += (weights.budget || 30) + 20;
@@ -214,57 +376,105 @@ async function classifyLead(leadId) {
   if (data.intent) score += weights.intent || 15;
   if (data.propertyType) score += /villa|commercial/.test(data.propertyType) ? 10 : 5;
 
-  const thresholds = businessConfig.scoreThresholds;
-  let classification = 'Unqualified';
-  if (score >= (thresholds.hot || 70)) classification = 'Hot';
-  else if (score >= (thresholds.warm || 50)) classification = 'Warm';
-  else if (score >= (thresholds.cold || 30)) classification = 'Cold';
+  // Simple HOT/COLD classification based on score
+  let classification = 'COLD';
+  if (score >= 60) {
+    classification = 'HOT';
+  }
 
   leads[leadIndex].classification = classification;
-  leads[leadIndex].metadata = { ...leads[leadIndex].metadata, ...data };
-  leads[leadIndex].score = score;
+  leads[leadIndex].metadata = { 
+    ...leads[leadIndex].metadata, 
+    ...data,
+    score: score,
+    classificationMethod: 'rule-based',
+    classificationReason: `Score-based: ${score}/100`
+  };
   writeLeads(leads);
+  console.log(`✅ Rule-based classification: Lead ${leadId} = ${classification} (Score: ${score})`);
 }
 
 async function callGroq(prompt) {
   try {
-    if (!process.env.GROQ_API_KEY) throw new Error('API key not configured');
+    if (!process.env.GROQ_API_KEY) throw new Error('GROQ API key not configured');
 
     const { data } = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: process.env.GROQ_MODEL || 'llama3-8b-8192',
+        model: process.env.GROQ_MODEL || 'llama3-70b-8192',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant. Provide brief, relevant responses only.' },
+          { 
+            role: 'system', 
+            content: 'You are an expert real estate lead qualification assistant. Provide accurate, structured responses based on conversation analysis.' 
+          },
           { role: 'user', content: prompt }
         ],
-        max_tokens: 100,
-        temperature: 0.7
+        max_tokens: 500,
+        temperature: 0.3, // Lower temperature for more consistent classification
+        top_p: 0.9
       },
       {
         headers: {
           'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
           'Content-Type': 'application/json'
         },
-        timeout: 10000
+        timeout: 15000
       }
     );
 
     return data?.choices?.[0]?.message?.content?.trim() || '';
   } catch (err) {
     console.error('Groq API error:', err.message);
-    // Updated fallback responses - more concise and relevant
-    const fallbacks = [
-      "Thank you for the information.",
-      "Got it, thanks!",
-      "Received your details.",
-      "Information noted."
-    ];
-    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    throw err; // Re-throw to allow fallback handling
   }
 }
+
+// Additional endpoint to manually reclassify leads
+app.post('/api/leads/:leadId/reclassify', async (req, res) => {
+  try {
+    const { leadId } = req.params;
+    await classifyLeadWithGroq(leadId);
+    
+    const leads = readLeads();
+    const lead = leads.find(l => l.id === leadId);
+    
+    if (!lead) {
+      return res.status(404).json({ error: 'Lead not found' });
+    }
+    
+    res.json({ 
+      success: true, 
+      classification: lead.classification,
+      metadata: lead.metadata
+    });
+  } catch (error) {
+    console.error('Error reclassifying lead:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Endpoint to get classification statistics
+app.get('/api/leads/stats', (req, res) => {
+  try {
+    const leads = readLeads();
+    const stats = {
+      total: leads.length,
+      hot: leads.filter(l => l.classification && l.classification.toUpperCase() === 'HOT').length,
+      cold: leads.filter(l => l.classification && l.classification.toUpperCase() === 'COLD').length,
+      invalid: leads.filter(l => l.classification && l.classification.toUpperCase() === 'INVALID').length,
+      pending: leads.filter(l => !l.classification || l.classification.toUpperCase() === 'PENDING').length
+    };
+    
+    console.log('Stats calculated:', stats); // Debug log
+    res.json({ success: true, stats });
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📱 WhatsApp Lead Bot API ready for industry: ${INDUSTRY}`);
+  console.log(`🤖 Groq AI classification enabled: ${process.env.GROQ_API_KEY ? 'YES' : 'NO'}`);
 });
