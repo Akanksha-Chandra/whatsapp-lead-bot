@@ -3,12 +3,14 @@ import axios from 'axios';
 import { 
   Users, 
   TrendingUp, 
-  Clock, 
+  Thermometer,
+  AlertTriangle,
   Phone, 
   MessageSquare,
   Filter,
   Download,
-  Search
+  Search,
+  RefreshCw
 } from 'lucide-react';
 import './Dashboard.css';
 
@@ -30,6 +32,7 @@ const Dashboard = ({ onLeadSelect }) => {
 
   useEffect(() => {
     fetchLeads();
+    fetchStats();
   }, []);
 
   useEffect(() => {
@@ -50,15 +53,35 @@ const Dashboard = ({ onLeadSelect }) => {
     }
   };
 
+  const fetchStats = async () => {
+    try {
+      const response = await axios.get(`${API_BASE}/api/leads/stats`);
+      if (response.data.success) {
+        setStats(response.data.stats);
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
   const calculateStats = (leadsData) => {
     const stats = {
       total: leadsData.length,
-      hot: leadsData.filter(lead => lead.classification === 'Hot').length,
-      cold: leadsData.filter(lead => lead.classification === 'Cold').length,
-      invalid: leadsData.filter(lead => lead.classification === 'Invalid').length,
-      pending: leadsData.filter(lead => lead.classification === 'Pending').length
+      hot: leadsData.filter(lead => 
+        lead.classification && lead.classification.toLowerCase() === 'hot'
+      ).length,
+      cold: leadsData.filter(lead => 
+        lead.classification && lead.classification.toLowerCase() === 'cold'
+      ).length,
+      invalid: leadsData.filter(lead => 
+        lead.classification && lead.classification.toLowerCase() === 'invalid'
+      ).length,
+      pending: leadsData.filter(lead => 
+        !lead.classification || lead.classification.toLowerCase() === 'pending'
+      ).length
     };
     setStats(stats);
+    console.log('Calculated stats:', stats); // Debug log
   };
 
   const filterLeads = () => {
@@ -66,9 +89,15 @@ const Dashboard = ({ onLeadSelect }) => {
 
     // Apply classification filter
     if (filter !== 'all') {
-      filtered = filtered.filter(lead => 
-        lead.classification.toLowerCase() === filter.toLowerCase()
-      );
+      if (filter === 'pending') {
+        filtered = filtered.filter(lead => 
+          !lead.classification || lead.classification.toLowerCase() === 'pending'
+        );
+      } else {
+        filtered = filtered.filter(lead => 
+          lead.classification && lead.classification.toLowerCase() === filter.toLowerCase()
+        );
+      }
     }
 
     // Apply search filter
@@ -83,6 +112,20 @@ const Dashboard = ({ onLeadSelect }) => {
     setFilteredLeads(filtered);
   };
 
+  const reclassifyLead = async (leadId) => {
+    try {
+      const response = await axios.post(`${API_BASE}/api/leads/${leadId}/reclassify`);
+      if (response.data.success) {
+        // Refresh leads after reclassification
+        fetchLeads();
+        alert('Lead reclassified successfully!');
+      }
+    } catch (error) {
+      console.error('Error reclassifying lead:', error);
+      alert('Error reclassifying lead');
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -94,26 +137,43 @@ const Dashboard = ({ onLeadSelect }) => {
   };
 
   const getClassificationColor = (classification) => {
-    switch (classification?.toLowerCase()) {
-      case 'hot': return '#ff4444';
-      case 'cold': return '#ffa500';
-      case 'invalid': return '#666';
-      default: return '#25d366';
+    if (!classification) return '#95a5a6'; // Gray for pending
+    
+    switch (classification.toLowerCase()) {
+      case 'hot': return '#e74c3c'; // Red for hot
+      case 'cold': return '#3498db'; // Blue for cold  
+      case 'invalid': return '#95a5a6'; // Gray for invalid
+      default: return '#f39c12'; // Orange for pending
+    }
+  };
+
+  const getClassificationIcon = (classification) => {
+    if (!classification) return <MessageSquare size={16} />;
+    
+    switch (classification.toLowerCase()) {
+      case 'hot': return <TrendingUp size={16} />;
+      case 'cold': return <Thermometer size={16} />;
+      case 'invalid': return <AlertTriangle size={16} />;
+      default: return <MessageSquare size={16} />;
     }
   };
 
   const exportLeads = () => {
     const csvContent = [
-      ['Name', 'Phone', 'Source', 'Classification', 'Created At', 'Location', 'Budget', 'Timeline'],
+      ['Name', 'Phone', 'Source', 'Classification', 'Confidence', 'Reason', 'Created At', 'Location', 'Budget', 'Timeline', 'Intent', 'Property Type'],
       ...filteredLeads.map(lead => [
         lead.name,
         lead.phone,
         lead.source,
-        lead.classification,
+        lead.classification || 'Pending',
+        lead.metadata?.confidence || '',
+        lead.metadata?.classificationReason || '',
         formatDate(lead.createdAt),
         lead.metadata?.location || '',
         lead.metadata?.budget || '',
-        lead.metadata?.timeline || ''
+        lead.metadata?.timeline || '',
+        lead.metadata?.intent || '',
+        lead.metadata?.propertyType || ''
       ])
     ].map(row => row.join(',')).join('\n');
 
@@ -140,6 +200,10 @@ const Dashboard = ({ onLeadSelect }) => {
       <div className="dashboard-header">
         <h2>📊 Lead Dashboard</h2>
         <div className="dashboard-actions">
+          <button onClick={fetchLeads} className="refresh-button">
+            <RefreshCw size={16} />
+            Refresh
+          </button>
           <button onClick={exportLeads} className="export-button">
             <Download size={16} />
             Export CSV
@@ -171,11 +235,21 @@ const Dashboard = ({ onLeadSelect }) => {
 
         <div className="stat-card cold">
           <div className="stat-icon">
-            <Clock size={24} />
+            <Thermometer size={24} />
           </div>
           <div className="stat-content">
             <h3>{stats.cold}</h3>
             <p>Cold Leads</p>
+          </div>
+        </div>
+
+        <div className="stat-card invalid">
+          <div className="stat-icon">
+            <AlertTriangle size={24} />
+          </div>
+          <div className="stat-content">
+            <h3>{stats.invalid}</h3>
+            <p>Invalid Leads</p>
           </div>
         </div>
 
@@ -185,7 +259,7 @@ const Dashboard = ({ onLeadSelect }) => {
           </div>
           <div className="stat-content">
             <h3>{stats.pending}</h3>
-            <p>In Progress</p>
+            <p>Pending</p>
           </div>
         </div>
       </div>
@@ -207,25 +281,31 @@ const Dashboard = ({ onLeadSelect }) => {
             className={filter === 'all' ? 'active' : ''}
             onClick={() => setFilter('all')}
           >
-            All
+            All ({stats.total})
           </button>
           <button 
             className={filter === 'hot' ? 'active' : ''}
             onClick={() => setFilter('hot')}
           >
-            Hot
+            🔥 Hot ({stats.hot})
           </button>
           <button 
             className={filter === 'cold' ? 'active' : ''}
             onClick={() => setFilter('cold')}
           >
-            Cold
+            ❄️ Cold ({stats.cold})
+          </button>
+          <button 
+            className={filter === 'invalid' ? 'active' : ''}
+            onClick={() => setFilter('invalid')}
+          >
+            ❌ Invalid ({stats.invalid})
           </button>
           <button 
             className={filter === 'pending' ? 'active' : ''}
             onClick={() => setFilter('pending')}
           >
-            Pending
+            ⏳ Pending ({stats.pending})
           </button>
         </div>
       </div>
@@ -238,6 +318,7 @@ const Dashboard = ({ onLeadSelect }) => {
               <th>Lead Info</th>
               <th>Classification</th>
               <th>Details</th>
+              <th>AI Analysis</th>
               <th>Created</th>
               <th>Actions</th>
             </tr>
@@ -258,17 +339,26 @@ const Dashboard = ({ onLeadSelect }) => {
                   </div>
                 </td>
                 <td>
-                  <span 
-                    className="classification-badge"
-                    style={{ backgroundColor: getClassificationColor(lead.classification) }}
-                  >
-                    {lead.classification || 'Pending'}
-                  </span>
-                  {lead.score && (
-                    <div className="lead-score">
-                      Score: {lead.score}/10
-                    </div>
-                  )}
+                  <div className="classification-container">
+                    <span 
+                      className="classification-badge"
+                      style={{ 
+                        backgroundColor: getClassificationColor(lead.classification),
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                    >
+                      {getClassificationIcon(lead.classification)}
+                      {lead.classification || 'Pending'}
+                    </span>
+                    {lead.metadata?.confidence && (
+                      <div className="confidence-score">
+                        {lead.metadata.confidence}% confident
+                      </div>
+                    )}
+                  </div>
                 </td>
                 <td>
                   <div className="lead-metadata">
@@ -276,10 +366,30 @@ const Dashboard = ({ onLeadSelect }) => {
                       <div>📍 {lead.metadata.location}</div>
                     )}
                     {lead.metadata?.budget && (
-                      <div>💰 {lead.metadata.budget}</div>
+                      <div>💰 ₹{lead.metadata.budget}</div>
                     )}
                     {lead.metadata?.timeline && (
                       <div>⏰ {lead.metadata.timeline}</div>
+                    )}
+                    {lead.metadata?.intent && (
+                      <div>🎯 {lead.metadata.intent}</div>
+                    )}
+                    {lead.metadata?.propertyType && (
+                      <div>🏠 {lead.metadata.propertyType}</div>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <div className="ai-analysis">
+                    {lead.metadata?.classificationReason && (
+                      <div className="classification-reason">
+                        <small>{lead.metadata.classificationReason}</small>
+                      </div>
+                    )}
+                    {lead.metadata?.priority && (
+                      <div className="priority-badge">
+                        Priority: {lead.metadata.priority}
+                      </div>
                     )}
                   </div>
                 </td>
@@ -289,13 +399,24 @@ const Dashboard = ({ onLeadSelect }) => {
                   </div>
                 </td>
                 <td>
-                  <button 
-                    className="view-chat-button"
-                    onClick={() => onLeadSelect(lead)}
-                  >
-                    <MessageSquare size={14} />
-                    View Chat
-                  </button>
+                  <div className="action-buttons">
+                    <button 
+                      className="view-chat-button"
+                      onClick={() => onLeadSelect(lead)}
+                    >
+                      <MessageSquare size={14} />
+                      Chat
+                    </button>
+                    {lead.classification && lead.classification !== 'Invalid' && (
+                      <button 
+                        className="reclassify-button"
+                        onClick={() => reclassifyLead(lead.id)}
+                        title="Reclassify with AI"
+                      >
+                        <RefreshCw size={14} />
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -309,6 +430,14 @@ const Dashboard = ({ onLeadSelect }) => {
             <p>Try adjusting your filters or create a new lead</p>
           </div>
         )}
+      </div>
+
+      {/* Summary Footer */}
+      <div className="dashboard-summary">
+        <p>
+          Showing {filteredLeads.length} of {stats.total} leads
+          {filter !== 'all' && ` (filtered by ${filter})`}
+        </p>
       </div>
     </div>
   );
